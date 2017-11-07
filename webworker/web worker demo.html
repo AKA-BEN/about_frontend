@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>web worker</title>
+</head>
+<body>
+    <p><input type="text" id="first">*<input type="text" id="second"><span id="result"></span></p>
+    <p><button onclick = 'stopWorker()'>stop worker</button></p>
+    <script>
+        var myWorker = new Worker('worker.js'),
+            first = document.getElementById('first'),
+            second = document.getElementById('second'),
+            result = document.getElementById('result');
+
+        first.onchange = function(){
+            myWorker.postMessage([first.value,second.value]);
+            console.log('Message posted to worker');
+        }
+        second.onchange = function(){
+            myWorker.postMessage([first.value,second.value]);
+            console.log('Message posted to worker');
+        }
+
+        myWorker.onmessage = function(e){
+            result.textContent = e.data;
+            console.log('Message received from worker');
+        }
+
+        function stopWorker(){
+            myWorker.terminate();
+        }
+    </script>    
+</body>
+</html>
